@@ -1,6 +1,5 @@
 package kopo.poly.controller;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import kopo.poly.dto.MelonDTO;
 import kopo.poly.service.IMelonService;
 import lombok.extern.slf4j.Slf4j;
@@ -77,5 +76,43 @@ public class MelonController {
         log.info(this.getClass().getName() + ".getSingerSongCnt End!");
 
         return rList;
+    }
+    /**
+     * 가수별 수집된 노래의 수 가져오기
+     */
+    @GetMapping(value = "melon/getSingerSong")
+    public List<MelonDTO> getSingerSong()
+            throws Exception {
+
+        log.info(this.getClass().getName() + ".getSingerSongCnt Start!");
+
+        List<MelonDTO> rList = melonService.getSingerSong();
+
+        log.info(this.getClass().getName() + ".getSingerSongCnt End!");
+
+        return rList;
+    }
+    /**
+     * 가수별 수집된 노래의 수 가져오기
+     */
+    @GetMapping(value = "melon/collectMelonSongMany")
+    public String collectMelonSongMany() throws Exception {
+
+        log.info(this.getClass().getName() + ".collectMelonSongMany Start!");
+
+        //수집 결과 출력
+        String msg;
+
+        int res = melonService.collectMelonSongMany();
+
+        if (res == 1) {
+            msg = "success";
+
+        }else {
+            msg = "fail";
+        }
+        log.info(this.getClass().getName() + ".collectMelonSongMany End!");
+
+        return msg;
     }
 }

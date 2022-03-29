@@ -78,7 +78,7 @@ public class MelonService implements IMelonService {
         res = melonMapper.insertSong(pList, colNm);
 
         // RedisDB에 데이터저장하기
-        res = melonCacheMapper.insertSong(pList);
+        //res = melonCacheMapper.insertSong(pList);
 
         // 로그 찍기(추후 찍은 로그를 통해 이 함수에 접근했는지 파악하기 용이하다.)
         log.info(this.getClass().getName() + ".collectMelonSong End!");
@@ -97,7 +97,7 @@ public class MelonService implements IMelonService {
         List<MelonDTO> rList = new LinkedList<>();
 
         // RedisDB에 저장되어 있는지 확인하기(Key이름은 MongoDB 컬렉션 이름과 동일하게 사용함)
-        if (melonCacheMapper.getExistKey(colNm)){
+       /* if (melonCacheMapper.getExistKey(colNm)){
             for (Object rDTO: melonCacheMapper.getSongList(colNm)){
                 rList.add((MelonDTO) rDTO);
 
@@ -107,6 +107,8 @@ public class MelonService implements IMelonService {
             rList = melonMapper.getSongList(colNm);
 
         }
+*/
+        rList = melonMapper.getSongList(colNm);
 
         if (rList == null) {
             rList = new LinkedList<>();
@@ -133,6 +135,87 @@ public class MelonService implements IMelonService {
         log.info(this.getClass().getName() + ".getSingerSongCnt End!");
 
         return rList;
+    }
+
+    @Override
+    public List<MelonDTO> getSingerSong() throws Exception{
+        log.info(this.getClass().getName() + ".getSingerSong Start!");
+
+        //MongoDB에 저장된 컬렉션 이름
+        String colNm = "MELON_" + DateUtil.getDateTime("yyyyMMdd");
+
+        //수집된 데이터로부터 검색할 가수명
+        String singer = "(여자)아이들";
+
+        //결과값
+        List<MelonDTO> rList = null;
+        //Melon 노래 수집하기
+        if (this.collectMelonSong()==1) {
+            rList = melonMapper.getSingerSong(colNm, singer);
+
+            if (rList == null) {
+                rList = new LinkedList<>();
+            }
+        }else {
+            rList = new LinkedList<>();
+
+        }
+        log.info(this.getClass().getName() + ".getSingersong End!");
+
+        return rList;
+    }
+
+    @Override
+    public int collectMelonSongMany() throws Exception {
+
+        //로그 찍기(추후 찍은 로그를 통해 이 함수에 접근했는지 파악하기 용이하다.)
+        log.info(this.getClass().getName() + ".collectMelonSongMany Start!");
+
+        int res = 0;
+        List<MelonDTO> pList = new LinkedList<>();
+
+        //멜론 Top100 중 100위까지 정보 가져오는 페이지
+        String url = "https://www.melon.com/chart/index.htm";
+
+        // JSOUP 라이브러리를 통해 사이트 접족되면 그 사이트의 전제 HTML소스 저장할 변수
+        Document doc = Jsoup.connect(url).get();
+
+        // <div class="service_list_song"> 이 태그 내에서 있는 HTML소스만 element에 저장됨
+        Elements elements = doc.select("div.service_list_song");
+
+        //Iterator을 사용하여 멜론차트 정보를 가져오기
+        //멜론 100위까지
+        for (Element songInfo : elements.select("div.wrap_song_info")) {
+
+            //크롤링을 통해 데이터 저장하기
+            String song = CmmUtil.nvl(songInfo.select("div.ellipsis.rank01 a").text()); //노래
+            String singer = CmmUtil.nvl(songInfo.select("div.ellipsis.rank02 a").eq(0).text()); //가수
+
+            log.info("song : " + song);
+            log.info("singer : " + singer);
+
+            //가수와 노래 정보가 모드 수집되었다면, 자정함
+            if ((song.length() > 0) && (singer.length() > 0)) {
+
+                MelonDTO pDTO = new MelonDTO();
+                pDTO.setCollectTime(DateUtil.getDateTime("yyyyMMddhhmmss"));
+                pDTO.setSong(song);
+                pDTO.setSinger(singer);
+
+                //한번에 여러개의 데이터를 MongoDB에 저장할 List 형태의 데이터 저장하기
+                pList.add(pDTO);
+            }
+        }
+
+        //생성할 컬렉션명
+        String colNm = "MELON_" + DateUtil.getDateTime("yyyyMMdd");
+
+        //MongoDB에 데이터저장하기
+        res = melonMapper.insertSongMany(pList, colNm);
+
+        log.info(this.getClass().getName() + ".collectMelonSongMany End!");
+
+        return res;
     }
 
 }
