@@ -115,4 +115,73 @@ public class MelonController {
 
         return msg;
     }
+    /**
+     * 가수 이름이 방탄소년단을 BTS로 변경하기
+     */
+    @GetMapping(value = "melon/bts/updateBTSName")
+    public String btsupdatename() throws Exception {
+
+        log.info(this.getClass().getName() + ".updateBTSName Start!");
+
+        //결과 출력
+        String msg;
+
+        int res = melonService.updateBTSName();
+
+        if (res == 1) {
+            msg = "success";
+        } else {
+            msg = "fail";
+        }
+
+        log.info(this.getClass().getName() + ".updateBTSName End!");
+
+        return msg;
+    }
+    /**
+     * 가수 이름이 방탄소년단을 nickname 추가
+     */
+    @GetMapping(value = "melon/btsAddNickname")
+    public String btsAddField() throws Exception {
+
+        log.info(this.getClass().getName() + ".btsAddNickname");
+
+        //결과 출력
+        String msg;
+
+        int res = melonService.updateAddBTSNickname();
+
+        if (res == 1) {
+            msg = "success";
+        } else {
+            msg = "fail";
+        }
+
+        log.info(this.getClass().getName() + ".updateAddBTSNickname End!");
+
+        return msg;
+    }
+    /**
+     * 방탄소년단 member 추가하기
+     */
+    @GetMapping(value = "melon/btsAddMember")
+    public  String BTSAddMember() throws Exception {
+
+        log.info(this.getClass().getName() + ".btsAddMember Start!");
+
+        //결과 출력
+        String msg;
+
+        int res = melonService.updateAddBTSMember();
+
+        if (res == 1) {
+            msg = "success";
+        }else {
+            msg = "fail";
+        }
+
+        log.info(this.getClass().getName() + ".btsAddMember End!");
+
+        return msg;
+    }
 }
