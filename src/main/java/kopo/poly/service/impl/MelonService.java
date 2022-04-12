@@ -317,5 +317,50 @@ public class MelonService implements IMelonService {
 
         return res;
     }
+    @Override
+    public int updateManySong() throws Exception {
+        //로그 찍기
+        log.info(this.getClass().getName() + ".updateManySong Start!");
+
+        int res = 0;
+
+        String colNm = "MELON_" + DateUtil.getDateTime("yyyyMMdd");
+
+        //기존 수집된 TOP100 수집한 컬렉션 삭제하기
+        melonMapper.dropMelonCollection(colNm);
+
+        // TOP100 수집
+        if (this.collectMelonSong() == 1) {
+            String singer = "방탄소년단"; //수정할 가수 이름
+            String updateSinger = "BTS"; //변경될 가수이름
+            String updateSong = "BTS-SONG"; //변경될 노래제목
+
+            res = melonMapper.updateManySong(colNm,singer,updateSinger,updateSong);
+
+        }
+
+        //로그 찍기
+        log.info(this.getClass().getName() + ".updateManySong End!");
+
+        return res;
+    }
+
+    @Override
+    public int deleteSong() throws Exception {
+
+        log.info(this.getClass().getName() + ".deleteSong Start!");
+
+        int res = 0;
+
+        String colNm = "MELON_" + DateUtil.getDateTime("yyyyMMdd");
+
+        String singer = "방탄소년단";
+
+        res = melonMapper.deleteSong(colNm, singer);
+
+        log.info(this.getClass().getName() + ".deleteSong End!");
+
+        return res;
+    }
 
 }

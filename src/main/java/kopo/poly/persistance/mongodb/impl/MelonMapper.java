@@ -352,4 +352,63 @@ public class MelonMapper extends AbstractMongoDBComon implements IMelonMapper {
 		return res;
 	}
 
+	@Override
+	public int updateManySong(String pColNm, String pSinger, String pUpdateSinger, String pUpdateSong) throws Exception {
+		log.info(this.getClass().getName() + ".updateManySong Start!");
+
+		int res = 0;
+
+		MongoCollection<Document> col = mongodb.getCollection(pColNm);
+
+		log.info("pColNm : " + pColNm);
+		log.info("pSinger : " + pSinger);
+		log.info("pUpdateSinger : " + pUpdateSong);
+		log.info("pUpdateSong : " + pUpdateSong);
+
+		//조회할 조건(SQL의 WHERE 역활 / SELECT * FROM MLON where singer 방탄소년단)
+		Document query = new Document();
+		query.append("singer", pSinger);
+
+		//MongoDB 데이터 삭제는 반드시 컬렉션을 조회하고 objectID 기반으로 삭제
+		//MongoDB 환경은 분산환경으로 구성될 수 있기 떄문에 정확한 PK에 매핑하기 위해서임
+		FindIterable<Document> rs = col.find(query);
+
+		//한줄로 append해서 수정할 필드 추가해도 되지만, 가독성이 떨어져 줄마다 append함
+		Document updateDoc = new Document();
+		updateDoc.append("singer",pUpdateSinger); //기존 필드 수정
+		updateDoc.append("song", pUpdateSong); //기존 필드 수정
+		updateDoc.append("addDate", "난 기존 필드 수정과 동시에 추가하는 데이터"); //신규 필드 추가
+
+		rs.forEach(doc -> col.updateOne(doc,new Document("$set", updateDoc)));
+
+		res =1;
+
+		log.info(this.getClass().getName() + "updateManySong End!");
+
+		return res;
+	}
+	@Override
+	public int deleteSong(String pColNm, String pSinger) throws Exception {
+
+		log.info(this.getClass().getName() + ".deleteSong Start!");
+
+		int res = 0;
+
+		MongoCollection<Document> col = mongodb.getCollection(pColNm);
+
+		//조회할 조건(SQL의 WHERE 역활)
+		Document query = new Document();
+		query.append("singer", pSinger);
+
+		FindIterable<Document> rs = col.find(query);
+
+		rs.forEach(doc -> col.deleteOne(doc));
+
+		res =1;
+
+		log.info(this.getClass().getName() + ".deleteSong End!");
+
+		return res;
+	}
+
 	}

@@ -184,4 +184,49 @@ public class MelonController {
 
         return msg;
     }
+    /**
+     * 여러 필드 수정
+     */
+    @GetMapping(value = "melon/updateManySong")
+    public String updateManySong() throws Exception {
+
+        log.info(this.getClass().getName() + ".updateManySong Start!");
+
+        //결과 출력
+        String msg;
+
+        int res = melonService.updateManySong();
+
+        if (res == 1) {
+            msg = "success";
+        } else {
+            msg = "fail";
+        }
+
+        log.info(this.getClass().getName() + ".updateManySong End!");
+
+        return msg;
+    }
+    /**
+     * 가수의 노래 삭제
+     */
+    @GetMapping(value = "melon/deletSong")
+    public String deleteSong() throws Exception {
+
+        log.info(this.getClass().getName() + ".deleteSong Start!");
+
+        String msg;
+
+        int res = melonService.deleteSong();
+
+        if (res == 1) {
+            msg = "success";
+        } else {
+            msg = "fail";
+        }
+
+        log.info(this.getClass().getName() + ".deleteSong End!");
+
+        return msg;
+    }
 }
