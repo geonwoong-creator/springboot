@@ -187,4 +187,27 @@ public class RedisController {
 
         return rList;
     }
+    /**
+     * Hash 타입에 문자열 형태로 저장하기
+     */
+    @GetMapping(value = "redis/saveRedisHash")
+    public String saveRedisHash() throws Exception {
+
+        log.info(this.getClass().getName() + ".saveRedisHash Start!");
+
+        //수집 결과 출력
+        String msg;
+
+        int res = myRedisService.saveRedisHash();
+
+        if (res ==1) {
+            msg = "success";
+        } else {
+            msg = "fail";
+        }
+
+        log.info(this.getClass().getName() + ".saveRedisHash End!");
+
+        return msg;
+    }
 }

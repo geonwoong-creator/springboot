@@ -50,4 +50,9 @@ public interface IMyRedisService {
      * List타입에 JSON 형태로 람다식으로 저장된 데이터 가져오기
      */
     List<RedisDTO> getRedisListJSONRamda() throws Exception;
+
+    /**
+     * Hash 타입에 문자열 형태로 저장하기
+     */
+    int saveRedisHash() throws Exception;
 }

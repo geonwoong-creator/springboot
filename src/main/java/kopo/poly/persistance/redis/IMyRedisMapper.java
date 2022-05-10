@@ -80,4 +80,13 @@ public interface IMyRedisMapper {
      * @return 결과값
      */
     List<RedisDTO> getRedisListJSONRamda(String redisKey) throws Exception;
+
+    /**
+     * Hash 타입에 문자열 형태로 저장하기
+     *
+     * @param rediskey Redis저장 키
+     * @param pDTO 저장할 정보들
+     * @return 저장 성공 여부
+     */
+    int saveRedisHash(String rediskey, RedisDTO pDTO) throws Exception;
 }

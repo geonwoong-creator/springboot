@@ -255,4 +255,30 @@ public int saveRedisListJSON(String redisKey, List<RedisDTO> pList) throws Excep
 
         return rList;
     }
+    @Override
+    public int saveRedisHash(String redisKey, RedisDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + "saveRedisHash Start!");
+
+        int res = 0;
+
+        /*
+        redis 저장 및 읽기에 대한 데이터 타입 지정(String 타입으로 지정함)
+         */
+        redisDB.setKeySerializer(new StringRedisSerializer()); //string 타입
+        redisDB.setValueSerializer(new StringRedisSerializer()); //string 타입
+
+        redisDB.opsForHash().put(redisKey, "name", CmmUtil.nvl(pDTO.getName()));
+        redisDB.opsForHash().put(redisKey, "email", CmmUtil.nvl(pDTO.getEmail()));
+        redisDB.opsForHash().put(redisKey, "addr", CmmUtil.nvl(pDTO.getAddr()));
+
+        //저장되는 데이터의 유효기간
+        redisDB.expire(redisKey, 100, TimeUnit.MINUTES);
+
+        res = 1;
+
+        log.info(this.getClass().getName() + ".saveRedisHash End!");
+
+        return res;
+    }
 }
