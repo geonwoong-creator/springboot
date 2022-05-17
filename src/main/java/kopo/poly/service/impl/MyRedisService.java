@@ -7,9 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Service("MyRedisService")
@@ -215,4 +213,137 @@ public class MyRedisService implements IMyRedisService {
 
         return res;
     }
+    @Override
+    public RedisDTO getRedisHash() throws Exception {
+
+        log.info(this.getClass().getName() + ".getRedisHash Start!");
+
+        String redisKey = "myRedis_Hash";
+
+        RedisDTO rDTO = myRedisMapper.getRedisHash(redisKey);
+
+        if (rDTO == null) {
+            rDTO = new RedisDTO();
+
+        }
+
+        log.info(this.getClass().getName() + ".getRedisHash End!");
+
+        return rDTO;
+    }
+    @Override
+    public int saveRedisSetJSONRamda() throws Exception {
+        log.info(this.getClass().getName() + ".saveRedisSetJSONRamda Start!");
+
+        String redisKey = "myRedis_Set_JSON";
+
+        Set<RedisDTO> pSet = new HashSet<>();
+
+        for (int i = 0; i < 10; i++) {
+
+            RedisDTO pDTO = new RedisDTO();
+            pDTO.setTest_text(i + "번째 데이터입니다.");
+            pDTO.setName("박건웅[" + i + "]");
+            pDTO.setAddr("의정부");
+            pDTO.setEmail("rjsdnd0420@naver.com");
+
+            pSet.add(pDTO);
+            pDTO = null;
+        }
+
+        int res = myRedisMapper.saveRedisSetJSONRamda(redisKey, pSet);
+
+        log.info(this.getClass().getName() + ".saveRedisSetJSONRamda End!");
+
+        return res;
+    }
+    @Override
+    public Set<RedisDTO> getRedisSetJSONRamda() throws Exception {
+
+        log.info(this.getClass().getName() + ".getRedisSetJSONRamda Start!");
+
+        String redisKey = "myRedis_Set_JSON";
+
+        Set<RedisDTO> rSet = myRedisMapper.getRedisSetJSONRamda(redisKey);
+
+        if (rSet == null) {
+            rSet = new HashSet<>();
+
+        }
+
+        log.info(this.getClass().getName() + ".getRedisSetJSONRamda End!");
+
+        return rSet;
+    }
+    @Override
+    public int saveRedisZSetJSON() throws Exception {
+        log.info(this.getClass().getName() + ".saveRedisZSetJSON Start!");
+
+        String redisKey = "myRedis_ZSet_JSON";
+
+        List<RedisDTO> pList = new LinkedList<>();
+
+        for (int i = 0; i < 10; i++) {
+
+            RedisDTO pDTO = new RedisDTO();
+            pDTO.setTest_text(i + "번째 데이터입니다.");
+            pDTO.setName("박건웅[" + i + "]");
+            pDTO.setAddr("의정부");
+            pDTO.setEmail("rjsdnd0420@naver.com");
+
+            pList.add(pDTO);
+            pDTO = null;
+        }
+
+        int res = myRedisMapper.saveRedisZSetJSON(redisKey, pList);
+
+        log.info(this.getClass().getName() + ".saveRedisZSetJSON End!");
+
+        return res;
+    }
+    @Override
+    public Set<RedisDTO> getRedisZSetJSON() throws Exception {
+
+        log.info(this.getClass().getName() + ".getRedisZSetJSON Start!");
+
+        String redisKey = "myRedis_ZSet_JSON";
+
+        Set<RedisDTO> rSet = myRedisMapper.getRedisZSetJSON(redisKey);
+
+        if (rSet == null) {
+            rSet = new HashSet<>();
+
+        }
+
+        log.info(this.getClass().getName() + ".getRedisZSetJSON End!");
+
+        return rSet;
+    }
+    @Override
+    public boolean deleteDataJSON() throws Exception {
+
+        log.info(this.getClass().getName() + ".deleteDataJSONService Start!");
+
+        String redisKey = "myRedis_ZSet_JSON";
+
+        boolean res = myRedisMapper.deleteDataJSON(redisKey);
+
+        log.info(this.getClass().getName() + ".deleteDataJSONService End!");
+
+        return res;
+    }
+    @Override
+    public boolean deleteDataString() throws Exception {
+
+        log.info(this.getClass().getName() + ".deleteDataStringService Start!");
+
+        String redisKey = "myRedis_Hash";
+
+        boolean res = myRedisMapper.deleteDataString(redisKey);
+
+        log.info(this.getClass().getName() + ".deleteDataStringService End!");
+
+        return res;
+    }
+
 }

@@ -109,6 +109,4 @@ public interface IMelonMapper {
 	 */
 	int deleteSong(String colNm, String singer) throws Exception;
 
-
-
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @RestController
@@ -209,5 +210,121 @@ public class RedisController {
         log.info(this.getClass().getName() + ".saveRedisHash End!");
 
         return msg;
+    }
+    /**
+     * Hash 타입에 문자열 형태로 저장된 값 가져오기
+     */
+    @GetMapping(value = "redis/getRedisHash")
+    public RedisDTO getRedisHash() throws Exception {
+
+        log.info(this.getClass().getName() + ".getRedisHash Start!");
+
+        RedisDTO rDTO = myRedisService.getRedisHash();
+
+        log.info(this.getClass().getName() + ".getRedisHash End!");
+
+        return rDTO;
+    }
+    /**
+     * Set타입에 JSON 형태로 람다식을 이용하여 저장하기(비동가화)
+     */
+    @GetMapping(value = "redis/saveRedisSetJSONRamda")
+    public String saveRedisSetJSONRamda() throws Exception {
+
+        log.info(this.getClass().getName() + ".saveRedisSetJSONRamda Start!");
+
+        //수집결과출력
+        String msg;
+
+        int res = myRedisService.saveRedisSetJSONRamda();
+
+        if (res == 1) {
+            msg = "success";
+        }else {
+            msg = "fail";
+        }
+
+        log.info(this.getClass().getName() + ".saveRedisSetJSONRamda End!");
+
+        return msg;
+    }
+    /**
+     * Set타입에 JSON Ramda 가져오기
+     */
+    @GetMapping(value = "redis/getRedisSetJSONRamda")
+    public Set<RedisDTO> getRedisSetJSONRamda() throws Exception {
+
+        log.info(this.getClass().getName() + ".getRedisSetJSONRamda Start!");
+
+        Set<RedisDTO> rSet = myRedisService.getRedisSetJSONRamda();
+
+        log.info(this.getClass().getName() + ".getRedisSetJSONRamda End!");
+
+        return rSet;
+    }
+    /**
+     * ZSet타입에 JSON 형태로 저장하기
+     */
+    @GetMapping(value = "redis/saveRedisZSetJSON")
+    public String saveRedisZSetJSON() throws Exception {
+
+        log.info(this.getClass().getName() + ".saveRedisZSetJSON Start!");
+
+        //수집결과출력
+        String msg;
+
+        int res = myRedisService.saveRedisZSetJSON();
+
+        if (res == 1) {
+            msg = "success";
+        }else {
+            msg = "fail";
+        }
+
+        log.info(this.getClass().getName() + ".saveRedisZSetJSON End!");
+
+        return msg;
+    }
+    /**
+     * ZSet타입에 JSON  가져오기
+     */
+    @GetMapping(value = "redis/getRedisZSetJSON")
+    public Set<RedisDTO> getRedisZSetJSON() throws Exception {
+
+        log.info(this.getClass().getName() + ".getRedisZSetJSON Start!");
+
+        Set<RedisDTO> rSet = myRedisService.getRedisZSetJSON();
+
+        log.info(this.getClass().getName() + ".getRedisZSetJSON End!");
+
+        return rSet;
+    }
+    /**
+     * RedisDB 데이터 삭제
+     */
+    @GetMapping(value = "redis/deleteDataJSON")
+    public boolean deleteDataJSON() throws Exception {
+
+        log.info(this.getClass().getName() + ".deleteDataJSONController Start!");
+
+        boolean res = myRedisService.deleteDataJSON();
+
+        log.info(this.getClass().getName() + ".deleteDataJSONController End!");
+
+        return res;
+    }
+    /**
+     * RedisDB 데이터 삭제
+     */
+    @GetMapping(value = "redis/deleteDataString")
+    public boolean deleteDataString() throws Exception {
+
+        log.info(this.getClass().getName() + ".deleteDataStringController Start!");
+
+        boolean res = myRedisService.deleteDataString();
+
+        log.info(this.getClass().getName() + ".deleteDataStringController End!");
+
+        return res;
     }
 }

@@ -3,6 +3,7 @@ package kopo.poly.persistance.redis;
 import kopo.poly.dto.RedisDTO;
 
 import java.util.List;
+import java.util.Set;
 
 public interface IMyRedisMapper {
 
@@ -89,4 +90,60 @@ public interface IMyRedisMapper {
      * @return 저장 성공 여부
      */
     int saveRedisHash(String rediskey, RedisDTO pDTO) throws Exception;
+    /**
+     * Hash 타입에 문자열 형태로 저장된 값 불러오기
+     *
+     * @param redisKey 가져올 RedisKey
+     * @return 결과 값
+     */
+    RedisDTO getRedisHash(String redisKey) throws Exception;
+    /**
+     * Set타입에 JSON 형태로 람다식 이용하여 저장하기
+     *
+     * @param redisKey Redis저장키
+     * @param pSet 저장할 정보들
+     * @return 저장 성공 여부
+     */
+    int saveRedisSetJSONRamda(String redisKey, Set<RedisDTO> pSet) throws Exception;
+    /**
+     * Set타입에 JSON 형태로 람다식을 이용하여 저장된 값 가져오기
+     *
+     * @param redisKey 가져올 RedisKey
+     * @return 결과 값
+     */
+    Set<RedisDTO> getRedisSetJSONRamda(String redisKey) throws Exception;
+
+    /**
+     * ZSet타입에 JSON 형태로 저장하기
+     *
+     * @param redisKey Redis 저장 키
+     * @param pList 저장할 정보들
+     * @return 저장 성공 여부
+     */
+    int saveRedisZSetJSON(String redisKey, List<RedisDTO> pList) throws Exception;
+
+
+    /**
+     * ZSet타입에 JSON 형태로  저장된 값 가져오기
+     *
+     * @param redisKey 가져올 RedisKey
+     * @return 결과 값
+     */
+    Set<RedisDTO> getRedisZSetJSON(String redisKey) throws Exception;
+
+    /**
+     *Redis에 JSON 구조로 저장된 데이터 삭제하기
+     *
+     * @param redisKey 삭제할 redisKey
+     * @return 결과 값
+     */
+    boolean deleteDataJSON(String redisKey) throws Exception;
+
+    /**
+     *Redis에 String 구조로 저장된 데이터 삭제하기
+     *
+     * @param redisKey 삭제할 redisKey
+     * @return 결과 값
+     */
+    boolean deleteDataString(String redisKey) throws Exception;
 }
